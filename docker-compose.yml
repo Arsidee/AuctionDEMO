@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: auction
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: auction_app_development
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bin/rails server -b 0.0.0.0
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://auction:password@db:5432/auction_app_development
+      RAILS_ENV: development
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
+  bundle_cache:

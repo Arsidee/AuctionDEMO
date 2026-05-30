@@ -1,0 +1,59 @@
+<div class="d-flex justify-content-between align-items-center mb-2">
+  <h1><%= @auction.name %></h1>
+  <div class="d-flex gap-2">
+    <%= link_to "Edit", edit_admin_auction_path(@auction), class: "btn btn-outline-primary btn-sm" %>
+    <%= button_to "Delete", admin_auction_path(@auction), method: :delete,
+        data: { turbo_confirm: "Delete this auction?" },
+        class: "btn btn-outline-danger btn-sm" %>
+  </div>
+</div>
+
+<p class="text-muted">
+  <%= @auction.start_time.strftime("%B %d, %Y at %l:%M %p") %> → <%= @auction.end_time.strftime("%B %d, %Y at %l:%M %p") %>
+</p>
+<% if @auction.description.present? %>
+  <p><%= @auction.description %></p>
+<% end %>
+
+<hr>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2>Lots</h2>
+  <%= link_to "Add Lot", new_admin_auction_lot_path(@auction), class: "btn btn-success btn-sm" %>
+</div>
+
+<% if @lots.empty? %>
+  <p class="text-muted">No lots yet.</p>
+<% else %>
+  <table class="table table-hover">
+    <thead class="table-secondary">
+      <tr>
+        <th>Name</th>
+        <th>Starting Price</th>
+        <th>Current Price</th>
+        <th>Bids</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @lots.each do |lot| %>
+        <tr>
+          <td><%= lot.name %></td>
+          <td>$<%= number_with_precision(lot.starting_price, precision: 2) %></td>
+          <td>$<%= number_with_precision(lot.current_price, precision: 2) %></td>
+          <td><%= lot.bids.count %></td>
+          <td class="text-end">
+            <%= link_to "Edit", edit_admin_auction_lot_path(@auction, lot), class: "btn btn-sm btn-outline-primary" %>
+            <%= button_to "Delete", admin_auction_lot_path(@auction, lot), method: :delete,
+                data: { turbo_confirm: "Delete this lot?" },
+                class: "btn btn-sm btn-outline-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<div class="mt-3">
+  <%= link_to "← Back to Auctions", admin_auctions_path, class: "btn btn-secondary btn-sm" %>
+</div>

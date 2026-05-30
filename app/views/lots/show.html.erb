@@ -1,0 +1,105 @@
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><%= link_to "Auctions", auctions_path %></li>
+    <li class="breadcrumb-item"><%= link_to @auction.name, auction_path(@auction) %></li>
+    <li class="breadcrumb-item active"><%= @lot.name %></li>
+  </ol>
+</nav>
+
+<div class="row">
+  <div class="col-md-6">
+    <% if @lot.image.attached? %>
+      <%= image_tag @lot.image, class: "img-fluid rounded mb-3", style: "max-height: 400px; object-fit: cover;" %>
+    <% end %>
+  </div>
+
+  <div class="col-md-6">
+    <h1 class="mb-2"><%= @lot.name %></h1>
+    <% if @lot.description.present? %>
+      <p><%= @lot.description %></p>
+    <% end %>
+
+    <table class="table table-sm mb-4">
+      <tr>
+        <th>Starting price</th>
+        <td>$<%= number_with_precision(@lot.starting_price, precision: 2) %></td>
+      </tr>
+      <tr>
+        <th>Current price</th>
+        <td class="fw-bold">$<%= number_with_precision(@lot.current_price, precision: 2) %></td>
+      </tr>
+      <% if @lot.winning_bid %>
+        <tr>
+          <th>Leading bidder</th>
+          <td><%= @lot.winning_bid.user.email %></td>
+        </tr>
+      <% end %>
+    </table>
+
+    <% if @auction.active? %>
+      <% if user_signed_in? %>
+        <div class="card">
+          <div class="card-header">Place a Bid</div>
+          <div class="card-body">
+            <% if defined?(@bid_errors) && @bid_errors.present? %>
+              <div class="alert alert-danger">
+                <ul class="mb-0">
+                  <% @bid_errors.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <%= form_with model: [@auction, @lot, @bid], url: auction_lot_bids_path(@auction, @lot) do |f| %>
+              <div class="mb-3">
+                <%= f.label :amount, "Your bid ($)", class: "form-label" %>
+                <%= f.number_field :amount, step: "0.01", min: "0", class: "form-control",
+                    placeholder: "Enter amount greater than $#{number_with_precision(@lot.current_price, precision: 2)}" %>
+              </div>
+              <%= f.submit "Place Bid", class: "btn btn-success" %>
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <div class="alert alert-info">
+          <%= link_to "Sign in", new_user_session_path %> or <%= link_to "register", new_user_registration_path %> to place a bid.
+        </div>
+      <% end %>
+    <% elsif @auction.ended? %>
+      <div class="alert alert-secondary">
+        This auction has ended.
+        <% if @lot.winning_bid %>
+          Winner: <strong><%= @lot.winning_bid.user.email %></strong> with $<%= number_with_precision(@lot.winning_bid.amount, precision: 2) %>.
+        <% else %>
+          No bids were placed.
+        <% end %>
+      </div>
+    <% else %>
+      <div class="alert alert-warning">This auction has not started yet.</div>
+    <% end %>
+  </div>
+</div>
+
+<% if @lot.bids.any? %>
+  <hr>
+  <h4 class="mt-3">Bid History</h4>
+  <table class="table table-striped table-sm">
+    <thead>
+      <tr>
+        <th>Bidder</th>
+        <th>Amount</th>
+        <th>Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @lot.bids.order(amount: :desc).each do |bid| %>
+        <tr>
+          <td><%= bid.user.email %></td>
+          <td>$<%= number_with_precision(bid.amount, precision: 2) %></td>
+          <td><%= bid.created_at.strftime("%b %d, %Y %l:%M %p") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

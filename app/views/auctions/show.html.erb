@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-between align-items-start mb-1">
+  <h1><%= @auction.name %></h1>
+  <% if @auction.active? %>
+    <span class="badge bg-success fs-6">Active</span>
+  <% elsif @auction.ended? %>
+    <span class="badge bg-secondary fs-6">Ended</span>
+  <% else %>
+    <span class="badge bg-warning text-dark fs-6">Upcoming</span>
+  <% end %>
+</div>
+
+<p class="text-muted mb-1">
+  <strong>Start:</strong> <%= @auction.start_time.strftime("%B %d, %Y at %l:%M %p") %> &nbsp;|&nbsp;
+  <strong>End:</strong> <%= @auction.end_time.strftime("%B %d, %Y at %l:%M %p") %>
+</p>
+
+<% if @auction.description.present? %>
+  <p class="mb-4"><%= @auction.description %></p>
+<% end %>
+
+<hr>
+
+<h2 class="mb-3">Lots</h2>
+
+<% if @lots.empty? %>
+  <p class="text-muted">No lots in this auction yet.</p>
+<% else %>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <% @lots.each do |lot| %>
+      <div class="col">
+        <div class="card h-100">
+          <% if lot.image.attached? %>
+            <%= image_tag lot.image, class: "card-img-top", style: "object-fit: cover; height: 200px;" %>
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title"><%= lot.name %></h5>
+            <p class="card-text text-muted small"><%= truncate(lot.description, length: 100) %></p>
+            <p class="mb-1"><strong>Starting price:</strong> $<%= number_with_precision(lot.starting_price, precision: 2) %></p>
+            <p class="mb-0"><strong>Current price:</strong> $<%= number_with_precision(lot.current_price, precision: 2) %></p>
+          </div>
+          <div class="card-footer">
+            <%= link_to "View Lot", auction_lot_path(@auction, lot), class: "btn btn-outline-primary btn-sm" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="mt-4">
+  <%= link_to "← Back to Auctions", auctions_path, class: "btn btn-secondary btn-sm" %>
+</div>

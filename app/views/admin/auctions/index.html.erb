@@ -1,0 +1,47 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Auctions</h1>
+  <%= link_to "New Auction", new_admin_auction_path, class: "btn btn-primary" %>
+</div>
+
+<% if @auctions.empty? %>
+  <p class="text-muted">No auctions yet.</p>
+<% else %>
+  <table class="table table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Lots</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @auctions.each do |auction| %>
+        <tr>
+          <td><%= auction.name %></td>
+          <td><%= auction.start_time.strftime("%b %d, %Y %l:%M %p") %></td>
+          <td><%= auction.end_time.strftime("%b %d, %Y %l:%M %p") %></td>
+          <td><%= auction.lots.count %></td>
+          <td>
+            <% if auction.active? %>
+              <span class="badge bg-success">Active</span>
+            <% elsif auction.ended? %>
+              <span class="badge bg-secondary">Ended</span>
+            <% else %>
+              <span class="badge bg-warning text-dark">Upcoming</span>
+            <% end %>
+          </td>
+          <td class="text-end">
+            <%= link_to "View", admin_auction_path(auction), class: "btn btn-sm btn-outline-secondary" %>
+            <%= link_to "Edit", edit_admin_auction_path(auction), class: "btn btn-sm btn-outline-primary" %>
+            <%= button_to "Delete", admin_auction_path(auction), method: :delete,
+                data: { turbo_confirm: "Delete this auction and all its lots?" },
+                class: "btn btn-sm btn-outline-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

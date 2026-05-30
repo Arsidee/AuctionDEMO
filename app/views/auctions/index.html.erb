@@ -1,0 +1,35 @@
+<h1 class="mb-4">Auctions</h1>
+
+<% if @auctions.empty? %>
+  <p class="text-muted">No auctions available yet.</p>
+<% else %>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <% @auctions.each do |auction| %>
+      <div class="col">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title"><%= auction.name %></h5>
+            <p class="card-text text-muted"><%= truncate(auction.description, length: 120) %></p>
+            <ul class="list-unstyled small">
+              <li><strong>Start:</strong> <%= auction.start_time.strftime("%b %d, %Y %l:%M %p") %></li>
+              <li><strong>End:</strong> <%= auction.end_time.strftime("%b %d, %Y %l:%M %p") %></li>
+              <li>
+                <strong>Status:</strong>
+                <% if auction.active? %>
+                  <span class="badge bg-success">Active</span>
+                <% elsif auction.ended? %>
+                  <span class="badge bg-secondary">Ended</span>
+                <% else %>
+                  <span class="badge bg-warning text-dark">Upcoming</span>
+                <% end %>
+              </li>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <%= link_to "View Auction", auction_path(auction), class: "btn btn-primary btn-sm" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
