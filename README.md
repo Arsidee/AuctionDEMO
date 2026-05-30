@@ -2,7 +2,7 @@
 
 A simple auction web app built with Ruby on Rails. Admins create auctions and lots, registered users place bids, and the highest bidder at the end of the auction window wins.
 
-Built as a portfolio/demo project — not production-grade.
+Built as a portfolio/demo project, not production-grade.
 
 ## Tech Stack
 
