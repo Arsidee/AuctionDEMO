@@ -1,9 +1,9 @@
-Admin.find_or_create_by!(email: "admin@example.com") do |a|
+AdminUser.find_or_create_by!(email: "admin@example.com") do |a|
   a.password = "password123"
   a.password_confirmation = "password123"
 end
 
-puts "Admin created: admin@example.com / password123"
+puts "AdminUser created: admin@example.com / password123"
 
 User.find_or_create_by!(email: "user@example.com") do |u|
   u.password = "password123"

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  devise_for :users
-  devise_for :admins, path: "admins",
-    controllers: { sessions: "admins/sessions" },
+  devise_for :users, path_names: { sign_in: "login", sign_out: "logout" }
+  devise_for :admin_users, path: "admins",
+    controllers: { sessions: "admin_users/sessions" },
     path_names: { sign_in: "login", sign_out: "logout", sign_up: "register" }
 
   root to: "auctions#index"

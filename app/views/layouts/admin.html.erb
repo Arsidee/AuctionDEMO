@@ -19,8 +19,8 @@
         <%= link_to "AuctionDEMO Admin", admin_root_path, class: "navbar-brand fw-bold" %>
         <div class="d-flex gap-2 ms-auto align-items-center">
           <%= link_to "View Site", root_path, class: "btn btn-outline-light btn-sm" %>
-          <span class="text-light small"><%= current_admin.email %></span>
-          <%= button_to "Sign out", destroy_admin_session_path, method: :delete, class: "btn btn-outline-light btn-sm" %>
+          <span class="text-light small"><%= current_admin_user.email %></span>
+          <%= button_to "Sign out", destroy_admin_user_session_path, method: :delete, class: "btn btn-outline-light btn-sm" %>
         </div>
       </div>
     </nav>

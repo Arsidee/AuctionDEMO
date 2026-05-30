@@ -14,10 +14,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    command: bin/rails server -b 0.0.0.0
+    command: bundle exec rails server -b 0.0.0.0
     volumes:
       - .:/app
-      - bundle_cache:/usr/local/bundle
     ports:
       - "3000:3000"
     environment:
@@ -28,4 +27,3 @@ services:
 
 volumes:
   postgres_data:
-  bundle_cache:
