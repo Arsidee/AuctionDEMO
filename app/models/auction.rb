@@ -5,6 +5,8 @@ class Auction < ApplicationRecord
   validates :start_time, :end_time, presence: true
   validate :end_time_after_start_time
 
+  scope :pending_close, -> { where(closed: false).where("end_time < ?", Time.current) }
+
   def active?
     Time.current.between?(start_time, end_time)
   end

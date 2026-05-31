@@ -24,6 +24,15 @@
             <%= button_to "Sign out", destroy_admin_user_session_path, method: :delete, class: "btn btn-outline-light btn-sm" %>
           <% elsif user_signed_in? %>
             <span class="text-light small"><%= current_user.email %></span>
+            <%= link_to notifications_path, class: "btn btn-outline-light btn-sm position-relative" do %>
+              &#x1F514;
+              <% unread_count = current_user.notifications.unread.count %>
+              <% if unread_count > 0 %>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  <%= unread_count %>
+                </span>
+              <% end %>
+            <% end %>
             <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "btn btn-outline-light btn-sm" %>
           <% else %>
             <%= link_to "Sign in", new_user_session_path, class: "btn btn-outline-light btn-sm" %>

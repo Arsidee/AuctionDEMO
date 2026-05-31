@@ -21,6 +21,25 @@ services:
       - "3000:3000"
     environment:
       DATABASE_URL: postgresql://auction:password@db:5432/auction_app_development
+      DB_HOST: db
+      DB_USER: auction
+      DB_PASSWORD: password
+      RAILS_ENV: development
+    depends_on:
+      - db
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bundle exec rails runner "SolidQueue::Supervisor.start"
+    volumes:
+      - .:/app
+    environment:
+      DATABASE_URL: postgresql://auction:password@db:5432/auction_app_development
+      DB_HOST: db
+      DB_USER: auction
+      DB_PASSWORD: password
       RAILS_ENV: development
     depends_on:
       - db

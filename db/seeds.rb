@@ -15,7 +15,7 @@ puts "User created: user@example.com / password123"
 auction = Auction.find_or_create_by!(name: "Spring Demo Auction") do |a|
   a.description = "A sample auction to demonstrate the app."
   a.start_time = Time.current - 1.hour
-  a.end_time = Time.current + 48.hours
+  a.end_time = Time.current + 3.minutes
 end
 
 lot1 = auction.lots.find_or_create_by!(name: "Vintage Watch") do |l|

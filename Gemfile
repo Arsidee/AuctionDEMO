@@ -9,6 +9,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 
 gem "devise"
+gem "solid_queue"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]

@@ -1,0 +1,7 @@
+<h2>Congratulations, <%= @user.email %>!</h2>
+
+<p>You won the lot <strong><%= @lot.name %></strong> in the auction <strong><%= @auction.name %></strong>.</p>
+
+<p>Your winning bid: <strong>$<%= number_with_precision(@winning_bid.amount, precision: 2) %></strong></p>
+
+<p>Thank you for participating!</p>

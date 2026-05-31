@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 
   root to: "auctions#index"
 
+  resources :notifications, only: [:index]
+
   resources :auctions, only: [:index, :show] do
     resources :lots, only: [:show] do
       resources :bids, only: [:create]
